@@ -1,0 +1,198 @@
+Constraints (restrições), chaves primárias e chaves estrangeiras
+
+Como as constraints são aplicadas às colunas das tabelas, é possível assegurar que os dados inseridos nelas serão consistentes conforme as regras definidas. Veja alguns tipos de constraints:
+
+NOT NULL - Garante que aquele campo não pode conter valores nulos, ou seja, se não houver um valor padrão (DEFAULT) definido, será sempre necessário passar um valor para esse campo durante a inserção ou alteração de dados.
+
+UNIQUE - Garante que o valor inserido na coluna da tabela é único, isto é, não pode haver outro valor igual para esta coluna registrado nesta tabela.
+
+PRIMARY KEY - Garante que o valor seja a chave primária da tabela, ou seja, que a coluna que possui essa constraint aplicada seja o identificador único da tabela. Ela também é, por definição, não nula (mesmo efeito da constraint NOT NULL) e única (mesmo efeito da constraint UNIQUE).
+
+FOREIGN KEY - Garante que o valor seja uma chave estrangeira da tabela, ou seja, faça referência à chave primária (valor em uma coluna com a constraint 
+
+PRIMARY KEY) de outra tabela, permitindo um relacionamento entre tabelas.
+
+DEFAULT - Garante que, caso nenhum valor seja inserido na coluna (ou caso a pessoa usuária insira um valor nulo), a constraint colocará o valor padrão passado para ela.
+
+mysql -u root -p / acessa o mysql
+
+SHOW DATABASES; / mostra os DBs
+
+
+O que é uma entidade?
+Quando se fala de entidades de um banco de dados, estamos normalmente falando de uma tabela que representa algum conceito do mundo real que você quer descrever (pessoa, eventos, acontecimentos) e suas propriedades (altura, horário do evento, nome do acontecimento). A entidade pessoa, por exemplo, pode ter as propriedades de altura, peso e idade. Uma entidade festa pode possuir as propriedades horário do evento, público-alvo e data da festa. Por fim, uma entidade venda pode possuir as propriedades valor da venda, dia da venda, produto vendido etc.
+Entidade: Pessoa
+Propriedades: Altura, peso, idade.
+A entidade é nossa tabela dentro de um banco de dados e as propriedades fazem parte dessa tabela.
+Em alguns desses casos, as entidades são individuais e não se relacionam entre si, porém, às vezes, elas são ligadas umas às outras através de relacionamentos. Vamos ver mais sobre isso a seguir.
+
+Retângulos representam entidades - Losangos representam o relacionamento
+
+TODO acrescentar as regras de interação com tabelas qual cave viaja pra onde
+
+Vamos dar um olhada nos principais tipos de queries a seguir:
+
+    -DDL: Data Definition Language - Todos os comandos que lidam com o esquema, a descrição e o modo como os dados devem existir em um banco de dados:
+
+        CREATE: Para criar bancos de dados, tabelas, índices, views, procedures, functions e triggers;
+        ALTER: Para alterar a estrutura de qualquer objeto;
+        DROP: Permite deletar objetos;
+        TRUNCATE: Apenas esvazia os dados dentro de uma tabela, mas a mantém no banco de dados.
+    
+    -DML: Data Manipulation Language - Comandos que são usados para manipular dados. São utilizados para armazenar, modificar, buscar e excluir dados em um banco de dados. Os comandos e usos mais comuns nesta categoria são:
+
+        SELECT: Usado para buscar dados em um banco de dados;
+        INSERT: Insere dados em uma tabela;
+        UPDATE: Altera dados dentro de uma tabela;
+        DELETE: Exclui dados de uma tabela.
+    
+    -DCL: Data Control Language - Mais focado nos comandos que concedem direitos, permissões e outros tipos de controle ao sistema de banco de dados.
+
+        GRANT: Concede acesso a um usuário;
+        REVOKE: Remove acessos concedidos através do comando GRANT.
+    
+    -TCL: Transactional Control Language - Lida com as transações dentro de suas pesquisas.
+
+        COMMIT: Muda suas alterações de temporárias para permanentes no seu banco de dados;
+        ROLLBACK: Desfaz todo o impacto realizado por um comando;
+        SAVEPOINT: Define pontos para os quais uma transação pode voltar. É uma maneira de voltar para pontos específicos de sua query;
+        TRANSACTION: Comandos que definem onde, como e em que escopo suas transações são executadas.
+
+
+É possível gerar e calcular valores usando apenas SELECT valor_a_ser_calculado_ou_exibido;
+Perceba que a palavra-chave AS permite que você dê nome às suas colunas para que elas façam mais sentido quando estiver lendo os resultados. Lembre-se de que, caso o nome tenha mais de uma palavra, devemos usar aspas simples para nomear as colunas;
+Note que sempre finalizamos uma query usando o ponto e vírgula (;);
+Observe também que as palavras-chave (reservadas) estão em maiúsculo. Isso é uma convenção para facilitar a leitura da query. É recomendado que faça o mesmo.
+
+
+-CONCAT - juntando duas ou mais colunas
+    -SELECT CONCAT(first_name, ' ', last_name) AS 'Nome Completo' FROM sakila.actor;
+
+-DISTINCT - evitando dados repetidos
+    SELECT DISTINCT Nome FROM escola.estudantes; / Se trazer um resultado igual a um ja obtido, esse resultado não irá aparecer
+
+-COUNT - contando resultados
+    SELECT COUNT(email) FROM sakila.staff; / Só conta os valores não nulos (vazios entrão) - Podendo ser usado com DISTINCT, WHERE entre outros comandos em conjunto
+
+-LIMIT - especificando a quantidade de resultados / Trazendo apenas 10 resultados
+    -# Query + LIMIT quantidade_de_resultados
+    SELECT * FROM sakila.rental LIMIT 10;
+    
+-LIMIT OFFSET - Pulando linhas desnecessárias / Pula uma quantidade de linhas
+    # Query + LIMIT quantidade_de_linhas OFFSET quantidade_de_linhas_a_pular
+    SELECT * FROM sakila.rental LIMIT 10 OFFSET 3;
+    Necessita do LIMIT junto 
+
+-ORDER BY - ordenando resultados
+    Vamos aprender agora como criar resultados elegantes usando o ORDER BY:
+
+    SELECT * FROM sakila.address
+    ORDER BY address DESC, district;       
+
+    Ao usarmos o comando ORDER BY, podemos ordenar os resultados de forma alfabética ou numérica. Logo em seguida, informamos qual coluna iremos usar para ordenar os resultados. Podemos fazer de forma crescente (padrão do comando, porém pode ser usado o ASC) ou de forma decrescente (usando o DESC). Também é possível ordenar por mais de uma coluna. Assim, caso haja valores repetidos na primeira, a tabela será ORDENADA pelos valores da segunda, e assim por diante.
+
+OPERADORES
+
+-- OPERADOR - DESCRIÇÃO
+=   IGUAL
+>   MAIOR QUE
+<   MENOR QUE
+>=  MAIOR QUE OU IGUAL
+<=  MENOR QUE OU IGUAL
+<>  DIFERENTE DE
+AND OPERADOR LÓGICO E
+OR  OPERADOR LÓGICO OU
+NOT NEGAÇÃO
+IS  COMPARA COM VALORES BOOLEANOS (TRUE, FALSE, NULL) / True = 1, False = 0
+
+O operador AND tem preferência sobre o operador OR
+
+O LIKE é usado para buscar por meio de uma sequência específica de caracteres, como no exemplo acima. Além disso, dois “curingas”, ou modificadores, são normalmente usados com o LIKE:
+
+% - O sinal de percentual, que pode representar zero, um ou múltiplos caracteres
+
+_ - O underscore (às vezes chamado de underline, no Brasil), que representa um único caractere
+
+
+IN e BETWEEN - englobando uma faixa de resultados
+
+
+Data e tempo - lidando com resultados temporais
+    -O MySQL, por padrão, usa o formato YYYY-MM-DD (ano/mês/dia). Você é obrigado, pelo banco de dados, a salvar nesse formato, e não é possível alterá-lo.
+
+    DATE - Possui apenas data, no formato YYYY-MM-DD na faixa de 1001-01-01 até 9999-12-31
+    DATETIME - Possui data e tempo, no formato YYYY-MM-DD HH:MM:SS com a faixa de 1000-01-01 00:00:00 até 9999-12-31 23:59:59..
+
+
+    -- Teste cada um dos comandos a seguir:
+SELECT DATE(payment_date) FROM sakila.payment; -- YYYY-MM-DD
+SELECT YEAR(payment_date) FROM sakila.payment; -- Ano
+SELECT MONTH(payment_date) FROM sakila.payment; -- Mês
+SELECT DAY(payment_date) FROM sakila.payment; -- Dia
+SELECT HOUR(payment_date) FROM sakila.payment; -- Hora
+SELECT MINUTE(payment_date) FROM sakila.payment; -- Minuto
+SELECT SECOND(payment_date) FROM sakila.payment; -- Segundo
+
+
+Exibindo e filtrando dados de forma agrupada com GROUP BY e HAVING
+ -Como dito, o GROUP BY removerá duplicações, retornando apenas um valor da coluna usada no agrupamento.
+    -Funciona como uma mistura de ORDER BY com DISTINCT
+    -Certas siatuações como utilizar uma expressão como o COUNT em uma operação de JOIN, foi necessário de fato o GROUP 
+
+
+Como utilizar o INNER JOIN
+    -Como foi visto no vídeo, o INNER JOIN permite retornar todos os resultados em que a condição da cláusula ON for satisfeita. A sintaxe de um INNER JOIN é a seguinte:
+
+    SELECT t1.coluna, t2.coluna
+    FROM tabela1 AS t1
+    INNER JOIN tabela2 AS t2
+    ON t1.coluna_em_comum = t2.coluna_em_comum;
+
+    Usar o ALIAS é importante para deixar o código mais legível E O DB NÃO DAR ERRO DE AMBIGUIDADE
+
+-LEFT JOIN: quando utilizamos o LEFT JOIN, focamos a tabela da esquerda. São retornados todos os registros da tabela da esquerda e valores correspondentes da tabela da direita, caso existam. Valores que não possuem correspondentes são exibidos como nulos.
+
+    SELECT
+    c.customer_id,
+    c.first_name,
+    c.last_name,
+    a.actor_id,
+    a.first_name,
+    a.last_name
+    FROM sakila.customer AS c
+    LEFT JOIN sakila.actor AS a
+    ON c.last_name = a.last_name
+    ORDER BY c.last_name;
+
+
+-RIGHT JOIN: quando utilizamos o RIGHT JOIN, focamos a tabela da direita. São retornados todos os registros da tabela da direita e valores correspondentes da tabela da esquerda, caso existam. Valores que não possuem correspondentes são exibidos como nulos.
+
+    SELECT
+    c.customer_id,
+    c.first_name,
+    c.last_name,
+    a.actor_id,
+    a.first_name,
+    a.last_name
+    FROM sakila.customer AS c
+    RIGHT JOIN sakila.actor AS a
+    ON c.last_name = a.last_name
+    ORDER BY c.last_name;
+
+-O que é SELF JOIN e quando utilizá-lo
+
+
+-Modelando o DB - Normalizção
+
+    -Você será capaz de:
+        Modelar um banco de dados;
+        
+        Identificar entidades, atributos e relacionamentos;
+        
+        Construir um diagrama entidade-relacionamento (diagrama ER);
+        
+        Criar um banco de dados;
+        
+        Criar e modelar tabelas com base em um diagrama ER;
+        
+        Normalizar o banco de dados seguindo as Formas Normais.

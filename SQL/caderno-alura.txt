@@ -1,0 +1,59 @@
+Definições
+    A entidade principal é o próprio DB armazenando tabelas
+
+    Ao se criar a tabela definimos o tipo dos campos e o nº de campos
+    As linhas podem ser infinitas só o nº de colunas que é estipulado
+        Podemos dizer quanto de disco esse banco poderá ter
+
+    Chave primária: Pode ter não é obrigatório e não permiti que este campo se repita
+        Chave primária composta - para 2 ou mais colunas
+
+    Chave estrangeira: Interliga diferentes tabelas fazendo com que o dado preenchido exista na tabela que envia a chave
+        ---Gera índice automaticamente
+
+    índice: instrumento usado para achar elementos na minha tabela de maneira mais rápida        
+        Exemplo: o índice meio que gera uma pré organização da coluna com índice, para quando rodar uma busca por um nome
+        ele ajuda levando em consideração a ordem alfab. assim a busca se inicia de acordo com a letra do nome buscado
+
+    Esquemas: são grupos de tabelas cujos dados envolvem o mesmo assunto
+
+    View: Fundiona como uma tabela, porém apenas é uma query sendo executada automaticamente entregando os dados
+        Pode conter uma regra de negócio        
+
+
+MANIPULANDO BANDO DE DADOS 02
+
+    Criando um banco de dados
+        no workbench schema e DB são sinônimos
+        
+GERENCIANDO AS TABELAS DO BANCO DE DADOS 03
+    Tipos de dados  
+        Unsigned: aceita nºs com sinais
+
+        Cuidar quando queremos um número decimal que se arredonda ou não
+            Pontos flutuantes são arredondados quando superam o n° de casas específicado
+            Pontos fixos não
+
+    Criando a primeira tabela
+        cpf é bom criar como texto, pois o tipo nº irá tirar os zeros da frente
+
+    Apagando tabelas: 
+        Tabelas e DBs apaga-se usando o drop, além de índices, chave primária 
+
+
+INSERT INTO
+UPDATE TABELA_TAL SET com WHERE
+DELETE FROM TABELA_TAL com WHERE
+
+    Incluindo chave primária
+        Incluída no campo código utilizando ALTER TABLE
+            ALTER TABLE tbproduto ADD PRIMARY KEY (PRODUTO)
+
+        Melhor para evitar entradas duplicadas no DB            
+
+    Manipulando datas
+        nesta aula foi mostrado como inserir uma nova coluna a tabela, além de gerar a primary key em cpf na coluna tbcliente
+        ALTER TABLE tabela_tal ADD COLUMN (COLUNA_NOVA TIPO)
+
+        Tratamos o tipo data como string e no seguinte formato '1999-05-12'
+            Ano com 4 digitos e mês e dia com 2 digitos
