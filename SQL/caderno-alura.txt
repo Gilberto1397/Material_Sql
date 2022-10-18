@@ -21,14 +21,14 @@ Definições
         Pode conter uma regra de negócio        
 
 
-MANIPULANDO BANDO DE DADOS 02
+MANIPULANDO BANCO DE DADOS 02
 
     Criando um banco de dados
         no workbench schema e DB são sinônimos
         
 GERENCIANDO AS TABELAS DO BANCO DE DADOS 03
     Tipos de dados  
-        Unsigned: aceita nºs com sinais
+        Unsigned: não aceita nºs com sinais
 
         Cuidar quando queremos um número decimal que se arredonda ou não
             Pontos flutuantes são arredondados quando superam o n° de casas específicado
@@ -49,7 +49,7 @@ DELETE FROM TABELA_TAL com WHERE
         Incluída no campo código utilizando ALTER TABLE
             ALTER TABLE tbproduto ADD PRIMARY KEY (PRODUTO)
 
-        Melhor para evitar entradas duplicadas no DB            
+        Ajuda a evitar entradas duplicadas no DB            
 
     Manipulando datas
         nesta aula foi mostrado como inserir uma nova coluna a tabela, além de gerar a primary key em cpf na coluna tbcliente
@@ -57,3 +57,15 @@ DELETE FROM TABELA_TAL com WHERE
 
         Tratamos o tipo data como string e no seguinte formato '1999-05-12'
             Ano com 4 digitos e mês e dia com 2 digitos
+
+05.Consultando os Dados            
+
+03.Filtrando registros   
+    WHERE <, >, = HÁ UMA STRING, O SQL CONSIDERA A ORDEM ALFABÉTICA
+        'B' ESTÁ NUMA POSÍÇÃO MAIOR COM RELAÇÃO HÁ 'A'
+
+        O FLOAT GERA DIFICULDADE EM FILTRAR VALORES DE PONTO FLUTUANTE COM EXATIDÃO
+            PARA ISSO É MELHOR O DECIMAL (PONTO FIXO)
+
+    07.Filtrando datas            
+        Usado as funções year() month() etc
