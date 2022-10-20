@@ -1,2 +1,18 @@
 06.História do MYSQL
     Resumindo muito potente - ótimo sistema de logs
+
+Filtrando as consultas de dados
+    01.Conhecendo o banco de dados
+        Entendo as estruturas do DB 
+        Para isso foi gerado um diagrama de entidades mostrando de maneira mais gráfica as tabelas e suas caracteristicas
+em database -> reverse engineer        
+
+    Querys condicionais mais complexas ir fazendo de dentro pra fora
+        V and F = F
+        V or F = V
+
+        (NOT ((3 > 2) OR (4 >= 5)) AND (5 > 4) ) OR (9 > 0)
+        (not ((v) or (f)) and (v)) or (v)
+        (not (v) and (v)) or (v)  
+        f or V
+        V
