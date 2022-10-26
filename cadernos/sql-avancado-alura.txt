@@ -1,7 +1,7 @@
 06.História do MYSQL
     Resumindo muito potente - ótimo sistema de logs
 
-Filtrando as consultas de dados
+02. Filtrando as consultas de dados
     01.Conhecendo o banco de dados
         Entendo as estruturas do DB 
         Para isso foi gerado um diagrama de entidades mostrando de maneira mais gráfica as tabelas e suas caracteristicas
@@ -16,3 +16,121 @@ em database -> reverse engineer
         (not (v) and (v)) or (v)  
         f or V
         V
+
+
+    07.Aplicando consultas condicionais        
+        Observar bem o uso do or e not, para saber oq acontece. a ordem da operação será de acordo com a ordem das colunas
+        na tabela
+
+
+    12.O que aprendemos? 
+
+        Nesta aula, aprendemos:
+
+        A importância de conhecer a base de dados antes de fazer as consultas;
+        O comando de consultas e como podemos filtrá-las;
+        Como podemos mesclar filtros condicionais com AND e OR;
+        A usar >, >=, <, <=, = ou <> nos filtros que envolvem valores;
+        Como funciona o comando LIKE;       
+
+03. Apresentação dos dados de uma consultas
+    01.Usando DISTINCT para visualizar a tabela
+        Usar o DISTINCT depois do select e antes da especificação de campos
+        Irá devolver os dados de acordo com os campos selecionados, verificando a repetição dos campos juntos da seleção QUASE COMO ORDER BY
+            SELECT DISTINCT EMBALAGEM, TAMANHO FROM tabela_de_produtos
+                Verifica se a embalagem com o tamanho já foi informada
+        Na busca por dados específicos o DISTINCT pode ser útil para saber o nº de repetições de um dado                        
+
+    03.Limitando a saída da consulta
+        LIMIT - também pode ser usado com offset
+            SELECT * FROM tabela_de_clientes LIMIT 1,3 - Pega a partir da posição 1, os 3 próximos, incluindo o 1
+                O sql conta as posições a partir do 0        
+
+    05 Ordenando a saída da consulta
+        O select traz dados na ordem em que os dados estão armazenados
+        ORDER BY - PADRÃO ASC - 
+            De acordo com o nº de campos a ordenação vai sendo mais apurada sempre que um campo o valor de um campo se repete
+                order by nome, idade / Ordena pelo nome e caso o nome se repita vai ordenar também pela idade                
+
+    07.Agrupando os resultados
+        GROUP BY - MUITO USADO COM MÉTODOS COMO SUM(), AVG(), MIN(), MAX()
+            Agrupa dados. 
+            SELECT ESTADO, BAIRRO, SUM(LIMITE_DE_CREDITO) AS LIMITE FROM tabela_de_clientes
+            WHERE CIDADE = 'Rio de Janeiro'
+            GROUP BY ESTADO, BAIRRO;
+                //o group by encerra a busca de acordo o os campos passados nele
+                    Se fosse um group by só pelo estado iria verificar essa condição e executar a queery por bairro e sum só 1x
+                    com bairro também no group by irá verificar o sum levando em consideração o limite pertencente ao mesmo estado e bairro
+                    Trazendo assim o sum total do estado, porém separado por bairros
+
+    09.Usando a condição HAVING
+        Forma adequada de trabalhar com condições envolvendo o group by, principalmente quando queremos condicionar
+        um select que envolva um método como sum, max, etc.
+                    
+    11.Classificar resultados
+        CASE
+        O CASE vem acompanhado dos termos WHEN (quando), THEN (então), ELSE (senão) e END (fim).
+        SELECT EMBALAGEM,
+            CASE 
+                WHEN PRECO_DE_LISTA >= 12 THEN 'PRODUTO CARO'
+                WHEN PRECO_DE_LISTA >= 7 AND PRECO_DE_LISTA < 12 THEN 'PRODUTO EM CONTA'
+                ELSE 'PRODUTO BARATO' 
+            END AS STATUS_PRECO, AVG(PRECO_DE_LISTA) AS PRECO_MEDIO
+            FROM tabela_de_produtos
+            WHERE sabor = 'Manga'
+            GROUP BY EMBALAGEM, 
+            CASE 
+                WHEN PRECO_DE_LISTA >= 12 THEN 'PRODUTO CARO'
+                WHEN PRECO_DE_LISTA >= 7 AND PRECO_DE_LISTA < 12 THEN 'PRODUTO EM CONTA'
+                ELSE 'PRODUTO BARATO' 
+            END 
+            ORDER BY EMBALAGEM;                    
+
+                Foi retornada uma coluna que fazia uma condição em cima do valor da coluna sabor
+
+    14.O que aprendemos?
+        Como apresentar somente linhas distintas numa seleção;
+        Como ordenar a saída da seleção;
+        Como agrupar linhas por um conjunto de campos e aplicando um critério de agrupamento sobre os campos numéricos (SOMA, MIN, MAX, MÉDIA, etc ..).
+        Como utilizar o comando HAVING para aplicar um filtro usando os campos numéricos agrupados como condição.
+        Como limitar a saída das consultas;
+        Como usar o CASE para classificar um determinado campo por um critério.    
+
+04.Juntando tabelas e consultas
+    01.Usando JOINS
+        Inner - traz as correspondências
+        Left - Traz correspondências e todos os campos da tabela antes do left join
+        Right - Traz as correspondências e todos os campos da tabela trazida com o right join
+        Full - Traz todos, correspondentes, left e right; TODO rever - MYSQL NÃO FAZ FULL
+        Cross - irá trazer o produto cartesiano das tabelas
+            Irá trazer os campos passados no select, mostrando dados repetidamente para cada campo do select
+                SELECT A.NOME, B.HOBBY FROM TABELA_ESQUERDA A, TABELA_DIREITA B;  TODO rever
+
+
+    Obtenha o faturamento anual da empresa. Leve em consideração que o valor financeiro das vendas consiste em multiplicar a quantidade pelo preço.
+
+    SELECT YEAR(NF.DATA_VENDA) AS ANO, SUM((INF.QUANTIDADE * INF.PRECO)) AS 'FATURAMENTO' 
+    FROM itens_notas_fiscais INF
+    INNER JOIN notas_fiscais NF
+    ON INF.NUMERO = NF.NUMERO
+    GROUP BY YEAR(NF.DATA_VENDA);    
+
+    LEFT E RIGHT IRÃO TRAZER OS CAMPOS SELECIONADOS MESMO QUE SEM correspondentes, MOSTRANDO NULL NOS DEMAIS CAMPOS QUE DEVERIAM HAVER correspondentes
+
+    05.Exemplos de FULL e CROSS JOIN
+        Só precisa por o alias na frente dos campos que são comuns entre as diferentes tabelas. campos que só estão em uma tabela não precisa especificar a referência de tabela  
+
+    07.Juntando consultas - UNION - UNION ALL
+        É importante para usar o UNION que o n° de campos e seus tipos (var, int, date) selecionados das 2 querys sejam iguais
+        UNION - Irá juntar e aplicar um DISTINCT por padrão, evitando dados repetidos
+        UNION ALL - não faz o DISTINCT
+
+    09.Subconsultas
+        Ajuda a deixar dinâmico, sem precisar ter retrabalho de alterar condições de busca.
+        Serve para ser utilizado como tabela após um FROM, entregando uma tabela de dados da subconsulta
+        Não esquecer de por um alias na subquery e acessar seus campos através desse alias
+        Os campos que a subquery entrega são os campos que a query externa terá acesso        
+
+    11.Visão
+        Muito bom para quando queremos fornecer apenas parte do nosso DB
+        Ao gerar uma nova view é padrão muito visto por vw no início do nome da view        
